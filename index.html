@@ -3,261 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VOID TRACKER ITALIA - Numverify Integration</title>
+    <title>VOID TRACKER ITALIA - Numverify Real-Time Lookup</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400;600&display=swap');
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Courier New', monospace;
         }
 
         body {
-            background: #0a0a0f;
-            font-family: 'Roboto Mono', monospace;
-            min-height: 100vh;
+            background: #0a0a0a;
+            color: #00ff00;
             padding: 20px;
-            color: #00ffff;
-            position: relative;
-        }
-
-        /* Effetto griglia digitale */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(rgba(0, 255, 255, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 0, 255, 0.05) 1px, transparent 1px);
-            background-size: 50px 50px;
-            pointer-events: none;
-            z-index: 0;
+            min-height: 100vh;
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Header con effetti glitch */
-        .cyber-header {
+            border: 2px solid #00ffff;
+            padding: 20px;
             background: #000;
-            border: 4px solid #00ffff;
-            border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 30px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 50px rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
         }
 
-        .cyber-header::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 0, 255, 0.1) 10px, rgba(255, 0, 255, 0.1) 20px);
-            pointer-events: none;
+        /* Header stile terminale */
+        .header {
+            border-bottom: 2px solid #ff00ff;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
         }
 
         h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 5em;
-            font-weight: 900;
-            text-transform: uppercase;
-            color: #fff;
-            text-shadow: 
-                0.05em 0 0 #ff00ff,
-                -0.05em -0.025em 0 #00ffff;
-            animation: glitch 725ms infinite;
+            font-size: 3em;
+            color: #00ffff;
+            text-shadow: 0 0 20px #00ffff;
             letter-spacing: 5px;
-            text-align: center;
-            position: relative;
-        }
-
-        @keyframes glitch {
-            0%, 100% { transform: translate(0); }
-            20% { transform: translate(-2px, 1px); }
-            40% { transform: translate(2px, -1px); }
-            60% { transform: translate(-1px, 2px); }
-            80% { transform: translate(1px, -2px); }
         }
 
         .subtitle {
-            text-align: center;
             color: #ff00ff;
-            font-size: 1.3em;
-            margin-top: 20px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
+            font-size: 1.2em;
+            margin-top: 10px;
         }
 
-        /* API Status Card */
-        .api-card {
-            background: linear-gradient(135deg, #000000, #1a0033);
-            border: 3px solid #00ff00;
-            border-radius: 15px;
-            padding: 20px;
+        /* API Key display */
+        .api-section {
+            background: #111;
+            border: 1px solid #00ff00;
+            padding: 15px;
             margin-bottom: 30px;
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 20px;
-            box-shadow: 0 0 30px rgba(0, 255, 0, 0.2);
-        }
-
-        .api-info {
-            display: flex;
             align-items: center;
-            gap: 20px;
             flex-wrap: wrap;
+            gap: 10px;
         }
 
-        .api-badge {
-            background: #00ff00;
-            color: #000;
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-weight: bold;
-            font-size: 1.2em;
-        }
-
-        .api-key-display {
-            font-family: monospace;
-            background: #111;
-            padding: 10px 20px;
-            border: 2px dashed #00ff00;
+        .api-key-box {
+            background: #000;
+            padding: 10px;
+            border: 1px dashed #00ff00;
             color: #00ff00;
             font-size: 1.2em;
-            border-radius: 10px;
         }
 
-        .api-status-badge {
-            background: #00ff00;
-            color: #000;
-            padding: 5px 15px;
-            border-radius: 20px;
+        .status-online {
+            color: #00ff00;
             animation: blink 2s infinite;
         }
 
         @keyframes blink {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+            50% { opacity: 0.3; }
         }
 
-        /* Search Panel */
-        .search-panel {
-            background: #000;
-            border: 4px solid #ff00ff;
-            border-radius: 20px;
-            padding: 40px;
+        /* Search box */
+        .search-section {
+            background: #111;
+            border: 2px solid #ff00ff;
+            padding: 30px;
             margin-bottom: 30px;
-            position: relative;
-            box-shadow: 0 0 40px rgba(255, 0, 255, 0.3);
         }
 
-        .search-panel::before {
-            content: "⚡ NUMMVERIFY API INTEGRATION ⚡";
-            position: absolute;
-            top: -15px;
-            left: 30px;
-            background: #000;
-            padding: 0 20px;
+        .search-title {
             color: #ff00ff;
-            font-weight: bold;
+            margin-bottom: 20px;
             font-size: 1.1em;
+            text-transform: uppercase;
         }
 
-        .input-container {
+        .search-container {
             display: flex;
-            gap: 15px;
             align-items: center;
+            gap: 10px;
             flex-wrap: wrap;
         }
 
-        .prefix-box {
-            background: linear-gradient(45deg, #00ffff, #ff00ff);
+        .prefix {
+            background: #00ffff;
             color: #000;
-            padding: 20px 30px;
-            border-radius: 15px;
-            font-size: 2em;
+            padding: 15px 20px;
+            font-size: 1.5em;
             font-weight: bold;
-            font-family: 'Orbitron', sans-serif;
-            box-shadow: 0 0 30px rgba(255, 0, 255, 0.5);
+            border-radius: 5px;
         }
 
         .phone-input {
             flex: 1;
-            min-width: 300px;
-            padding: 20px;
-            background: #111;
-            border: 3px solid #00ffff;
+            min-width: 250px;
+            padding: 15px;
+            background: #000;
+            border: 2px solid #00ffff;
             color: #00ffff;
-            font-size: 2em;
-            font-family: 'Orbitron', sans-serif;
-            border-radius: 15px;
+            font-size: 1.5em;
+            font-family: monospace;
             outline: none;
-            text-align: center;
         }
 
         .phone-input:focus {
             border-color: #ff00ff;
-            box-shadow: 0 0 30px rgba(255, 0, 255, 0.5);
         }
 
         .search-btn {
-            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            background: #ff00ff;
             color: #000;
             border: none;
-            padding: 20px 50px;
-            font-size: 2em;
+            padding: 15px 40px;
+            font-size: 1.5em;
             font-weight: bold;
-            font-family: 'Orbitron', sans-serif;
-            border-radius: 15px;
             cursor: pointer;
             transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            border-radius: 5px;
         }
 
         .search-btn:hover {
+            background: #00ffff;
             transform: scale(1.05);
-            box-shadow: 0 0 50px rgba(255, 0, 255, 0.7);
         }
 
         .search-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
-            transform: none;
         }
 
-        /* Loading Animation */
+        /* API Call display */
+        .api-call {
+            background: #000;
+            border: 1px solid #00ff00;
+            padding: 15px;
+            margin: 20px 0;
+            font-family: monospace;
+            color: #00ff00;
+            word-break: break-all;
+        }
+
+        .api-call-label {
+            color: #ff00ff;
+            margin-right: 10px;
+        }
+
+        /* Loading */
         .loading {
             display: none;
-            background: #000;
-            border: 3px solid #00ffff;
-            border-radius: 20px;
+            background: #111;
+            border: 2px solid #00ffff;
             padding: 40px;
-            margin: 30px 0;
             text-align: center;
+            margin: 30px 0;
         }
 
-        .loader {
-            border: 6px solid #111;
-            border-top: 6px solid #00ffff;
-            border-right: 6px solid #ff00ff;
+        .spinner {
+            border: 5px solid #333;
+            border-top: 5px solid #00ffff;
+            border-right: 5px solid #ff00ff;
             border-radius: 50%;
-            width: 80px;
-            height: 80px;
+            width: 60px;
+            height: 60px;
             animation: spin 1s linear infinite;
             margin: 0 auto 20px;
         }
@@ -267,198 +191,153 @@
             100% { transform: rotate(360deg); }
         }
 
-        .loading p {
-            color: #00ffff;
-            font-size: 1.5em;
-            margin: 10px 0;
-        }
-
-        .loading small {
-            color: #666;
-            font-size: 1.1em;
-        }
-
-        /* Results Grid */
+        /* Results */
         .results {
             display: none;
-            background: #000;
-            border: 4px solid #00ffff;
-            border-radius: 20px;
-            padding: 40px;
+            background: #111;
+            border: 2px solid #00ffff;
+            padding: 30px;
             margin-top: 30px;
-            box-shadow: 0 0 50px rgba(0, 255, 255, 0.3);
         }
 
         .result-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 3px solid #ff00ff;
+            border-bottom: 2px solid #ff00ff;
             padding-bottom: 20px;
             margin-bottom: 30px;
             flex-wrap: wrap;
-            gap: 20px;
         }
 
-        .number-large {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 3em;
-            color: #ff00ff;
-            text-shadow: 0 0 30px #ff00ff;
-            word-break: break-all;
+        .number-display {
+            font-size: 2.5em;
+            color: #00ffff;
+            font-weight: bold;
         }
 
         .valid-badge {
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: bold;
             background: #00ff00;
             color: #000;
-            padding: 10px 30px;
-            border-radius: 40px;
-            font-weight: bold;
-            font-size: 1.5em;
         }
 
         .data-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
+            gap: 20px;
             margin: 30px 0;
         }
 
-        .data-card {
-            background: #111;
-            border: 2px solid #00ffff;
-            border-radius: 15px;
-            padding: 25px;
-            transition: all 0.3s;
-        }
-
-        .data-card:hover {
-            border-color: #ff00ff;
-            transform: translateY(-5px);
-            box-shadow: 0 0 30px rgba(255, 0, 255, 0.3);
+        .data-item {
+            background: #000;
+            border: 1px solid #00ffff;
+            padding: 20px;
         }
 
         .data-label {
             color: #ff00ff;
-            font-size: 1em;
+            font-size: 0.9em;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .data-value {
             color: #00ffff;
-            font-size: 1.8em;
+            font-size: 1.5em;
             font-weight: bold;
             word-break: break-word;
-            font-family: 'Orbitron', sans-serif;
         }
 
-        .data-sub {
-            color: #666;
-            margin-top: 10px;
-            font-size: 0.9em;
-        }
-
-        .location-card {
-            grid-column: span 2;
-            background: linear-gradient(135deg, #111, #1a0033);
-            border: 3px solid #ff00ff;
-        }
-
-        .coordinates {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2em;
-            color: #00ffff;
-            text-align: center;
-            padding: 20px;
+        .raw-json {
             background: #000;
-            border: 2px dashed #ff00ff;
-            margin: 20px 0;
+            border: 2px solid #ff00ff;
+            padding: 20px;
+            margin-top: 30px;
+            overflow-x: auto;
         }
 
-        .error-message {
+        .raw-json pre {
+            color: #00ff00;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+
+        .error {
+            display: none;
             background: #ff0000;
             color: white;
             padding: 20px;
-            border-radius: 10px;
             margin: 20px 0;
-            display: none;
-            font-size: 1.3em;
             text-align: center;
-        }
-
-        .request-info {
-            background: #111;
-            border: 1px solid #00ffff;
-            padding: 15px;
-            margin: 20px 0;
-            font-family: monospace;
-            color: #666;
-            border-radius: 10px;
+            font-weight: bold;
         }
 
         footer {
             text-align: center;
-            margin-top: 50px;
-            color: #666;
+            margin-top: 30px;
+            padding: 20px;
             border-top: 1px solid #333;
-            padding-top: 20px;
+            color: #666;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Header -->
-        <div class="cyber-header">
+        <div class="header">
             <h1>VOID TRACKER</h1>
-            <div class="subtitle">⚡ POWERED BY NUMVERIFY API ⚡</div>
+            <div class="subtitle">NUMVERIFY INTEGRATION - ITALY ONLY</div>
         </div>
 
-        <!-- API Status Card -->
-        <div class="api-card">
-            <div class="api-info">
-                <span class="api-badge">🔑 API KEY</span>
-                <span class="api-key-display" id="apiKeyDisplay">96a841339e4aa170375fd0aa730e33dd</span>
+        <!-- API Key Info -->
+        <div class="api-section">
+            <div>
+                <span style="color: #ff00ff;">🔑 API KEY:</span>
+                <span class="api-key-box">96a841339e4aa170375fd0aa730e33dd</span>
             </div>
             <div>
-                <span class="api-status-badge">🟢 CONNESSO A NUMVERIFY</span>
+                <span class="status-online">🟢 NUMVERIFY ONLINE</span>
             </div>
         </div>
 
-        <!-- Search Panel -->
-        <div class="search-panel">
-            <div class="input-container">
-                <span class="prefix-box">+39</span>
-                <input type="text" class="phone-input" id="phoneNumber" placeholder="377 087 4661" value="3770874661">
-                <button class="search-btn" onclick="cercaConNumverify()" id="searchBtn">🔍 CERCA</button>
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-title">> INSERISCI NUMERO TELEFONICO ITALIANO</div>
+            
+            <div class="search-container">
+                <span class="prefix">+39</span>
+                <input type="text" class="phone-input" id="phoneNumber" placeholder="3770874661" value="3770874661">
+                <button class="search-btn" onclick="cercaNumero()" id="searchBtn">CERCA</button>
             </div>
-            <div style="text-align: center; margin-top: 20px; color: #666;">
-                <span style="color: #ff00ff;">📡 NUMVERIFY API</span> - Ricerca in tempo reale su database telefonici italiani
+
+            <!-- API Call Display -->
+            <div class="api-call">
+                <span class="api-call-label">API REQUEST:</span>
+                <span id="apiUrl">http://apilayer.net/api/validate?access_key=96a841339e4aa170375fd0aa730e33dd&number=393770874661&country_code=IT&format=1</span>
             </div>
         </div>
 
         <!-- Loading -->
         <div class="loading" id="loading">
-            <div class="loader"></div>
-            <p>INTERROGAZIONE NUMVERIFY IN CORSO...</p>
-            <small>Contattando server API - Richiesta validazione numero +39</small>
-            <div class="request-info" id="requestInfo">
-                GET http://apilayer.net/api/validate?access_key=96a841339e4aa170375fd0aa730e33dd&number=393770874661&country_code=IT&format=1
-            </div>
+            <div class="spinner"></div>
+            <p>INTERROGAZIONE API NUMVERIFY IN CORSO...</p>
+            <p style="color: #666; font-size: 0.9em; margin-top: 10px;">Richiesta a: apilayer.net</p>
         </div>
 
         <!-- Error -->
-        <div class="error-message" id="error">
-            ❌ ERRORE API: <span id="errorText"></span>
+        <div class="error" id="error">
+            <span id="errorMessage">ERRORE API</span>
         </div>
 
         <!-- Results -->
         <div class="results" id="results">
             <div class="result-header">
                 <div>
-                    <div class="number-large" id="numeroRicercato">+39 377 087 4661</div>
-                    <div style="color: #00ffff;" id="formatoInternazionale">393770874661</div>
+                    <div class="number-display" id="displayNumber">+39 377 087 4661</div>
+                    <div style="color: #ff00ff;" id="displayFormat">Formato: internazionale</div>
                 </div>
                 <div>
                     <span class="valid-badge" id="validBadge">✅ VALIDO</span>
@@ -466,65 +345,41 @@
             </div>
 
             <div class="data-grid">
-                <!-- Operatore -->
-                <div class="data-card">
+                <div class="data-item">
                     <div class="data-label">📱 OPERATORE</div>
-                    <div class="data-value" id="operatore">Vodafone Italia</div>
-                    <div class="data-sub" id="tipoLinea">Mobile</div>
+                    <div class="data-value" id="carrier">-</div>
                 </div>
-
-                <!-- Localizzazione -->
-                <div class="data-card">
-                    <div class="data-label">📍 LOCALIZZAZIONE</div>
-                    <div class="data-value" id="localizzazione">Italia (IT)</div>
-                    <div class="data-sub" id="prefisso">Prefisso: +39</div>
+                
+                <div class="data-item">
+                    <div class="data-label">📍 TIPO LINEA</div>
+                    <div class="data-value" id="lineType">-</div>
                 </div>
-
-                <!-- Zona -->
-                <div class="data-card">
-                    <div class="data-label">🗺️ ZONA</div>
-                    <div class="data-value" id="zona">Europa Occidentale</div>
-                    <div class="data-sub" id="continente">Europa</div>
+                
+                <div class="data-item">
+                    <div class="data-label">🇮🇹 PAESE</div>
+                    <div class="data-value" id="country">-</div>
                 </div>
-
-                <!-- Coordinate -->
-                <div class="data-card location-card">
-                    <div class="data-label">🌐 COORDINATE (DA PREFISSO)</div>
-                    <div class="coordinates" id="coordinate">
-                        45.4642° N, 9.1900° E
-                    </div>
-                    <div class="data-sub" style="text-align: center;">Localizzazione approssimativa basata sul prefisso</div>
+                
+                <div class="data-item">
+                    <div class="data-label">📞 PREFISSO</div>
+                    <div class="data-value" id="prefix">-</div>
                 </div>
-            </div>
-
-            <!-- Dettagli aggiuntivi -->
-            <div style="background: #111; border: 2px solid #ff00ff; border-radius: 15px; padding: 25px; margin-top: 20px;">
-                <h3 style="color: #ff00ff; margin-bottom: 20px;">📊 DETTAGLI NUMVERIFY API</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
-                    <div>
-                        <span style="color: #666;">Paese:</span><br>
-                        <span style="color: #00ffff; font-size: 1.2em;" id="paese">Italia</span>
-                    </div>
-                    <div>
-                        <span style="color: #666;">Prefisso paese:</span><br>
-                        <span style="color: #00ffff; font-size: 1.2em;" id="prefissoPaese">+39</span>
-                    </div>
-                    <div>
-                        <span style="color: #666;">Tipo:</span><br>
-                        <span style="color: #00ffff; font-size: 1.2em;" id="tipo">mobile</span>
-                    </div>
-                    <div>
-                        <span style="color: #666;">Formato E.164:</span><br>
-                        <span style="color: #00ffff; font-size: 1.2em;" id="e164">+393770874661</span>
-                    </div>
+                
+                <div class="data-item">
+                    <div class="data-label">🔢 NUMERO LOCALE</div>
+                    <div class="data-value" id="localFormat">-</div>
+                </div>
+                
+                <div class="data-item">
+                    <div class="data-label">🌍 FORMATO E.164</div>
+                    <div class="data-value" id="internationalFormat">-</div>
                 </div>
             </div>
 
             <!-- JSON Raw -->
-            <div style="margin-top: 30px; background: #111; border: 2px solid #00ffff; border-radius: 10px; padding: 20px;">
-                <div style="color: #ff00ff; margin-bottom: 10px;">📦 RISPOSTA JSON NUMVERIFY:</div>
-                <pre id="jsonResponse" style="color: #00ff00; font-family: monospace; background: #000; padding: 20px; border-radius: 10px; overflow-x: auto;">
-{
+            <div class="raw-json">
+                <div style="color: #ff00ff; margin-bottom: 10px;">📦 RISPOSTA API (RAW):</div>
+                <pre id="jsonResponse">{
   "valid": true,
   "number": "393770874661",
   "local_format": "3770874661",
@@ -535,130 +390,136 @@
   "location": "Vodafone",
   "carrier": "Vodafone Italia",
   "line_type": "mobile"
-}
-                </pre>
+}</pre>
             </div>
         </div>
 
         <footer>
-            <p>🔍 VOID TRACKER - Integrazione Numverify API | Key: 96a841339e4aa170375fd0aa730e33dd</p>
-            <p style="color: #666; margin-top: 10px;">Ricerca in tempo reale su database telefonici italiani</p>
+            <p>🔍 Numverify API Integration | Key: 96a841339e4aa170375fd0aa730e33dd | Italy Only</p>
+            <p style="color: #333;">http://apilayer.net/api/validate?access_key=YOUR_KEY&number=NUMBER&country_code=IT&format=1</p>
         </footer>
     </div>
 
     <script>
         const API_KEY = '96a841339e4aa170375fd0aa730e33dd';
-        
-        async function cercaConNumverify() {
-            let numero = document.getElementById('phoneNumber').value;
+        const BASE_URL = 'http://apilayer.net/api/validate';
+
+        async function cercaNumero() {
+            // Prendi il numero dall'input
+            let numeroInput = document.getElementById('phoneNumber').value;
             
-            // Pulizia numero
-            numero = numero.replace(/\s+/g, '').replace(/[^\d]/g, '');
+            // Pulisci il numero (rimuovi spazi, trattini, ecc)
+            numeroInput = numeroInput.replace(/[\s\-\(\)\+]/g, '');
             
-            // Validazione
-            if (!numero || numero.length < 6) {
+            // Validazione base
+            if (!numeroInput || numeroInput.length < 5) {
                 alert('Inserisci un numero valido');
                 return;
             }
 
-            // Assicurati che il numero inizi con 39 per l'Italia
+            // Costruisci il numero completo per l'API
+            // L'API vuole il numero con prefisso internazionale (39 per Italia)
             let numeroCompleto;
-            if (numero.startsWith('39')) {
-                numeroCompleto = numero;
-            } else if (numero.startsWith('0')) {
-                // Numero fisso italiano senza 39
-                numeroCompleto = '39' + numero.substring(1);
+            if (numeroInput.startsWith('39')) {
+                numeroCompleto = numeroInput;
+            } else if (numeroInput.startsWith('0')) {
+                // Numero fisso italiano (es. 02...)
+                numeroCompleto = '39' + numeroInput.substring(1);
             } else {
-                numeroCompleto = '39' + numero;
+                // Numero mobile senza 39 (es. 377...)
+                numeroCompleto = '39' + numeroInput;
             }
 
+            // Costruisci l'URL completo della chiamata API
+            const apiUrl = `${BASE_URL}?access_key=${API_KEY}&number=${numeroCompleto}&country_code=IT&format=1`;
+            
+            // Mostra l'URL nell'interface
+            document.getElementById('apiUrl').textContent = apiUrl;
+            
             // Mostra loading
             document.getElementById('loading').style.display = 'block';
             document.getElementById('results').style.display = 'none';
             document.getElementById('error').style.display = 'none';
             document.getElementById('searchBtn').disabled = true;
 
-            // Aggiorna info richiesta
-            document.getElementById('requestInfo').textContent = 
-                `GET http://apilayer.net/api/validate?access_key=${API_KEY}&number=${numeroCompleto}&country_code=IT&format=1`;
-
             try {
-                // Chiamata API Numverify
-                const response = await fetch(`http://apilayer.net/api/validate?access_key=${API_KEY}&number=${numeroCompleto}&country_code=IT&format=1`);
+                // Fai la chiamata API
+                const response = await fetch(apiUrl);
                 const data = await response.json();
-
-                console.log('Risposta Numverify:', data);
+                
+                console.log('Risposta API:', data);
 
                 // Nascondi loading
                 document.getElementById('loading').style.display = 'none';
 
-                if (data.valid) {
-                    // Mostra risultati
-                    document.getElementById('results').style.display = 'block';
-                    
-                    // Aggiorna i campi con i dati reali dell'API
-                    document.getElementById('numeroRicercato').textContent = data.international_format || `+39 ${numero}`;
-                    document.getElementById('formatoInternazionale').textContent = data.number || numeroCompleto;
-                    
-                    // Badge validità
-                    document.getElementById('validBadge').innerHTML = data.valid ? '✅ VALIDO' : '❌ NON VALIDO';
-                    document.getElementById('validBadge').style.background = data.valid ? '#00ff00' : '#ff0000';
-                    
-                    // Operatore
-                    document.getElementById('operatore').textContent = data.carrier || data.location || 'Vodafone Italia';
-                    document.getElementById('tipoLinea').textContent = data.line_type || 'mobile';
-                    
-                    // Localizzazione
-                    document.getElementById('localizzazione').textContent = `${data.country_name || 'Italia'} (${data.country_code || 'IT'})`;
-                    document.getElementById('prefisso').textContent = `Prefisso: +${data.country_prefix || '39'}`;
-                    
-                    // Zona
-                    document.getElementById('zona').textContent = 'Europa Occidentale';
-                    document.getElementById('continente').textContent = 'Europa';
-                    
-                    // Coordinate (simulate base al prefisso - Numverify non fornisce coordinate reali)
-                    const coordinateMap = {
-                        '377': '45.4642° N, 9.1900° E', // Milano
-                        '347': '41.9028° N, 12.4964° E', // Roma
-                        '338': '40.8518° N, 14.2681° E', // Napoli
-                        '333': '45.0703° N, 7.6869° E', // Torino
-                        '334': '44.4949° N, 11.3426° E', // Bologna
-                        '335': '43.7696° N, 11.2558° E', // Firenze
-                    };
-                    
-                    const prefisso = numero.substring(0, 3);
-                    document.getElementById('coordinate').textContent = coordinateMap[prefisso] || '42.5000° N, 12.5000° E';
-                    
-                    // Dettagli aggiuntivi
-                    document.getElementById('paese').textContent = data.country_name || 'Italia';
-                    document.getElementById('prefissoPaese').textContent = `+${data.country_prefix || '39'}`;
-                    document.getElementById('tipo').textContent = data.line_type || 'mobile';
-                    document.getElementById('e164').textContent = data.international_format || `+${numeroCompleto}`;
-                    
-                    // JSON Response
-                    document.getElementById('jsonResponse').textContent = JSON.stringify(data, null, 2);
-                    
-                } else {
-                    // Errore - numero non valido
+                // Verifica se c'è un errore
+                if (data.error) {
                     document.getElementById('error').style.display = 'block';
-                    document.getElementById('errorText').textContent = data.error?.info || 'Numero non valido o non trovato';
+                    document.getElementById('errorMessage').textContent = `Errore ${data.error.code}: ${data.error.info}`;
+                    return;
                 }
 
+                // Mostra i risultati
+                document.getElementById('results').style.display = 'block';
+                
+                // Aggiorna il display con i dati ricevuti
+                document.getElementById('displayNumber').textContent = data.international_format || `+39 ${numeroInput}`;
+                document.getElementById('displayFormat').textContent = `Formato: ${data.country_name ? 'internazionale' : 'locale'}`;
+                
+                // Badge validità
+                const validBadge = document.getElementById('validBadge');
+                if (data.valid) {
+                    validBadge.textContent = '✅ VALIDO';
+                    validBadge.style.background = '#00ff00';
+                } else {
+                    validBadge.textContent = '❌ NON VALIDO';
+                    validBadge.style.background = '#ff0000';
+                }
+                
+                // Popola i campi con i dati (o placeholder se non disponibili)
+                document.getElementById('carrier').textContent = data.carrier || data.location || 'Non disponibile';
+                document.getElementById('lineType').textContent = data.line_type || 'Non disponibile';
+                document.getElementById('country').textContent = data.country_name ? `${data.country_name} (${data.country_code})` : 'Italia (IT)';
+                document.getElementById('prefix').textContent = data.country_prefix ? `+${data.country_prefix}` : '+39';
+                document.getElementById('localFormat').textContent = data.local_format || numeroInput;
+                document.getElementById('internationalFormat').textContent = data.international_format || `+${numeroCompleto}`;
+                
+                // Mostra il JSON raw
+                document.getElementById('jsonResponse').textContent = JSON.stringify(data, null, 2);
+
             } catch (error) {
-                console.error('Errore API:', error);
+                console.error('Errore:', error);
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('error').style.display = 'block';
-                document.getElementById('errorText').textContent = error.message || 'Errore di connessione API';
+                document.getElementById('errorMessage').textContent = 'Errore di connessione: ' + error.message;
             } finally {
                 document.getElementById('searchBtn').disabled = false;
             }
         }
 
+        // Funzione per aggiornare l'URL in tempo reale mentre l'utente digita
+        document.getElementById('phoneNumber').addEventListener('input', function(e) {
+            let numero = e.target.value.replace(/[\s\-\(\)\+]/g, '');
+            
+            if (numero) {
+                if (numero.startsWith('39')) {
+                    numeroCompleto = numero;
+                } else if (numero.startsWith('0')) {
+                    numeroCompleto = '39' + numero.substring(1);
+                } else {
+                    numeroCompleto = '39' + numero;
+                }
+                
+                const apiUrl = `${BASE_URL}?access_key=${API_KEY}&number=${numeroCompleto}&country_code=IT&format=1`;
+                document.getElementById('apiUrl').textContent = apiUrl;
+            }
+        });
+
         // Carica esempio all'avvio
         window.onload = function() {
-            setTimeout(() => {
-                cercaConNumverify();
-            }, 1000);
+            // Mostra l'URL per il numero di esempio
+            const apiUrl = `${BASE_URL}?access_key=${API_KEY}&number=393770874661&country_code=IT&format=1`;
+            document.getElementById('apiUrl').textContent = apiUrl;
         };
     </script>
 </body>
